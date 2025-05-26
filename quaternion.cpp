@@ -1,15 +1,17 @@
 #include "quaternion.h"
 #include <math.h>
 
+namespace quaternion{
+
 // Constructor
 Quaternion::Quaternion() : w(0), x(0), y(0), z(0) {}
 
-Quaternion::Quaternion(double w, double x, double y, double z)
+Quaternion::Quaternion(float w, float x, float y, float z)
     : w(w), x(x), y(y), z(z) {}
 
 // Normalize the quaternion
 void Quaternion::normalize() {
-    double norm = sqrt(w * w + x * x + y * y + z * z);
+    float norm = sqrt(w * w + x * x + y * y + z * z);
     if (norm == 0) return;  // Avoid division by zero
     w /= norm;
     x /= norm;
@@ -33,7 +35,7 @@ Quaternion Quaternion::multiply(const Quaternion& q) const {
 }
 
 // Rotate a 3D vector using this quaternion (assumes normalized)
-// Quaternion Quaternion::rotateVector(double vx, double vy, double vz) const {
+// Quaternion Quaternion::rotateVector(float vx, float vy, float vz) const {
 void Quaternion::rotateVector(float& vx, float& vy, float& vz) const {
     Quaternion v_quat(0, vx, vy, vz);
     Quaternion q_conj = this->conjugate();
@@ -43,7 +45,14 @@ void Quaternion::rotateVector(float& vx, float& vy, float& vz) const {
     vz = rotated.z;
 }
 
-Quaternion gravityCorrection(double gx, double gy, double gz){
+float Quaternion::get_yaw() const{
+  return atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+}
+
+// Quaternion Quaternion
+
+
+Quaternion gravityCorrection(float gx, float gy, float gz){
     float dot = -gz;  // dot product of (gx, gy, gz) and (0, 0, -1) is just -gz
     float angle = acos(dot);
 
@@ -65,4 +74,7 @@ Quaternion gravityCorrection(double gx, double gy, double gz){
     g.normalize();
     return g;
 
+}
+
+float ref_yaw = 0.;
 }

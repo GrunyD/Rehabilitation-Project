@@ -1,4 +1,6 @@
-#include "commands.h"
+#include "haptic.h"
+
+namespace haptic{
 
 FeedBack punisher(PUNISH_PIN, 500);
 FeedBack rewarder(REWARD_PIN, 100);
@@ -20,4 +22,6 @@ void FeedBack::update() {
         digitalWrite(pin, LOW);
         active = false;
     }
+}
+
 }
